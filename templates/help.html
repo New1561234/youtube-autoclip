@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docs — Clip Studio</title>
+  <meta name="description" content="How to use Clip Studio: quick start, supported URL formats, settings, output, and troubleshooting.">
+  <meta name="color-scheme" content="dark light">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("clipper-theme");
+        if (t !== "light" && t !== "dark") {
+          t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="/" aria-label="Clip Studio home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span class="brand__text">Clip Studio</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a class="nav__link" href="/">Home</a>
+        <a class="nav__link nav__link--desktop" href="/#how-it-works">How it works</a>
+        <a class="nav__link" href="/help" aria-current="page">Docs</a>
+      </nav>
+      <div class="nav__actions">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Switch to light theme">
+          <span class="theme-toggle__track" aria-hidden="true"></span>
+          <span class="theme-toggle__icon" aria-hidden="true">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container">
+      <div class="docs__layout">
+        <aside class="docs__toc" aria-label="On this page">
+          <div class="docs__toc-title">On this page</div>
+          <a href="#quick-start">Quick start</a>
+          <a href="#url-formats">Supported URL formats</a>
+          <a href="#settings">Settings reference</a>
+<a href="#output">Output &amp; privacy</a>
+          <a href="#youtube-setup">Connecting YouTube</a>
+          <a href="#troubleshooting">Troubleshooting</a>
+        </aside>
+
+        <div class="docs__content">
+          <div class="section-head reveal">
+            <span class="eyebrow">Documentation</span>
+            <h2>How Clip Studio works</h2>
+            <p>Everything you need to go from a YouTube link to a share-ready vertical clip.</p>
+          </div>
+
+          <section class="doc-section" id="quick-start">
+            <h2><span class="num">1</span> Quick start</h2>
+            <p>Four steps and you are done. The whole pipeline runs locally on your machine.</p>
+            <ol class="steps">
+              <li><div><strong>Paste a YouTube link.</strong> Use any standard watch, Shorts, or youtu.be URL. The paste button reads straight from your clipboard.</div></li>
+              <li><div><strong>Pick your clip length.</strong> Drag the duration slider anywhere from 10 to 300 seconds. The default is 45 seconds.</div></li>
+              <li><div><strong>Set the lead-in.</strong> <em>Context before</em> adds extra seconds ahead of the detected highlight so the moment does not start abruptly.</div></li>
+              <li><div><strong>Hit Generate clip.</strong> Follow the live pipeline, then preview and download the finished MP4 from the result card.</div></li>
+            </ol>
+          </section>
+
+          <section class="doc-section" id="url-formats">
+            <h2><span class="num">2</span> Supported URL formats</h2>
+            <p>Clip Studio accepts the common YouTube link shapes. Each must contain an 11-character video ID.</p>
+<div class="code-chips">
+              <code class="code-chip">https://www.youtube.com/watch?v=VIDEO_ID</code>
+              <code class="code-chip">https://youtu.be/VIDEO_ID</code>
+              <code class="code-chip">https://www.youtube.com/shorts/VIDEO_ID</code>
+              <code class="code-chip">https://www.youtube.com/live/VIDEO_ID</code>
+              <code class="code-chip">https://www.youtube.com/embed/VIDEO_ID</code>
+              <code class="code-chip">https://m.youtube.com/watch?v=VIDEO_ID</code>
+              <code class="code-chip">https://music.youtube.com/watch?v=VIDEO_ID</code>
+            </div>
+            <p class="field__hint">Playlists and channel URLs are not supported &mdash; use a link to a single video. Live-stream VODs work via <code>/live/</code> links; an actively broadcasting stream is captured from the start, but is limited by the 10-minute download window and has no &ldquo;most replayed&rdquo; heatmap (audio-energy fallback is used).</p>
+          </section>
+
+          <section class="doc-section" id="settings">
+            <h2><span class="num">3</span> Settings reference</h2>
+            <p>Both settings are clamped to safe ranges on the server, so out-of-range values are corrected automatically.</p>
+            <table class="ref">
+              <thead>
+                <tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">Range</th><th scope="col">What it does</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>clip_duration</code></td>
+                  <td>45</td>
+                  <td>10 &ndash; 300 s</td>
+                  <td>Target length of the exported vertical clip in seconds.</td>
+                </tr>
+                <tr>
+                  <td><code>context_before</code></td>
+                  <td>10</td>
+                  <td>0 &ndash; 60 s</td>
+                  <td>Extra seconds added before the detected highlight so the cut has breathing room.</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="doc-section" id="output">
+            <h2><span class="num">4</span> Output &amp; privacy</h2>
+            <p>Clips are rendered as 9:16 vertical MP4 files and served straight from the local server for instant preview.</p>
+            <ul>
+              <li><strong>Resolution:</strong> 9:16 vertical, 1080p-class output.</li>
+              <li><strong>File name:</strong> <code>&lt;video_id&gt;_clip.mp4</code>, stored under a per-job folder so nothing is ever overwritten.</li>
+              <li><strong>Audio:</strong> included whenever the source video has an audio track.</li>
+              <li><strong>Local only:</strong> the server binds to <code>127.0.0.1</code>. Your links and clips never leave your machine.</li>
+              <li><strong>Heatmap:</strong> uses YouTube&rsquo;s &ldquo;most replayed&rdquo; data when available, otherwise falls back to audio-energy analysis.</li>
+            </ul>
+            <div class="callout">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <div><strong>Respect creators.</strong> This tool processes YouTube content. Only clip material you own or have permission to use, and follow YouTube&rsquo;s Terms of Service.</div>
+            </div>
+          </section>
+
+<section class="doc-section" id="youtube-setup">
+            <h2><span class="num">5</span> Connecting &amp; uploading to YouTube</h2>
+            <p>Uploading is <strong>optional</strong> and always requires your explicit approval. It uses Google OAuth 2.0 and the YouTube Data API&nbsp;v3 &mdash; not your Gemini API key. You only need to set it up once.</p>
+
+            <ol class="steps">
+              <li><div><strong>Create a Google Cloud project.</strong> Open the <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a>, create (or pick) a project, and note its name.</div></li>
+              <li><div><strong>Enable the YouTube Data API v3.</strong> Go to <em>APIs &amp; Services &rarr; Library</em>, search for <em>YouTube Data API v3</em>, and click <em>Enable</em>.</div></li>
+              <li><div><strong>Configure the OAuth consent screen.</strong> Under <em>APIs &amp; Services &rarr; OAuth consent screen</em>, choose <em>External</em> (or <em>Internal</em> if you use a Google Workspace org), fill in the app name and support email, and add your own Google account as a <em>Test user</em>. Add the two scopes below if you are asked to: <code>youtube.upload</code> and <code>youtube.readonly</code>.</div></li>
+              <li><div><strong>Create an OAuth client ID.</strong> Under <em>Credentials &rarr; Create credentials &rarr; OAuth client ID</em>, choose <em>Web application</em>. Under <em>Authorized redirect URIs</em> add exactly <code>http://127.0.0.1:5000/youtube/oauth2callback</code>. This must match the local server address &mdash; if you run on a different port, update the redirect URI here and in <code>youtube_auth.REDIRECT_URI</code>.</div></li>
+              <li><div><strong>Save the client secret.</strong> Download the JSON and save it as <code>credentials/client_secret.json</code> in the project folder. This file is git-ignored and must never be shared or committed.</div></li>
+              <li><div><strong>Connect.</strong> Restart the server, open Clip Studio, and click <em>Connect YouTube</em> in the top bar. Approve the requested permissions and you will return to the app. Your access token is stored locally in <code>credentials/token.json</code> (also git-ignored). Click the disconnect icon to revoke it at any time.</div></li>
+            </ol>
+
+            <h3 style="margin-top: var(--sp-5); font-size: var(--fs-lg); font-weight: 750;">Uploading a clip</h3>
+            <p>Once a clip is ready, the result card shows an <em>Upload to YouTube</em> panel. You can edit the title, description, and privacy before uploading. Uploads default to <strong>Private</strong>, and nothing is sent until you tick the confirmation box and press <em>Upload</em>. When it finishes you get a direct link to the video. Each clip can only be uploaded once &mdash; repeated clicks are ignored.</p>
+
+            <h3 style="margin-top: var(--sp-5); font-size: var(--fs-lg); font-weight: 750;">About Shorts</h3>
+            <p>YouTube &mdash; not this app &mdash; decides whether a video is classified as a Short. The API <strong>cannot guarantee</strong> Shorts classification. The clip stays in vertical 9:16 output, and adding <code>#shorts</code> to the title or description may help YouTube recognise it.</p>
+
+            <div class="callout callout--spaced">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <div><strong>Verification &amp; quotas.</strong> Apps in <em>Testing</em> mode have a small pool of test users and refresh tokens expire after ~7 days; click <em>Connect</em> again if uploads stop working. Uploading is subject to the YouTube Data API quota (a video insert costs ~1600 units; the default daily quota is 10,000 units). Unverified apps can only upload <em>private</em> videos until they pass Google&rsquo;s OAuth verification.</div>
+            </div>
+
+            <div class="callout">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <div><strong>Credentials stay local.</strong> Client secrets and access tokens are stored only in the git-ignored <code>credentials/</code> folder. They are never exposed to the browser, logs, or source control. Only upload clips you own or have permission to publish.</div>
+            </div>
+          </section>
+
+          <section class="doc-section" id="troubleshooting">
+            <h2><span class="num">6</span> Troubleshooting &amp; FAQ</h2>
+            <p>Common issues and how to resolve them.</p>
+            <div class="faq">
+              <details>
+                <summary>The job fails with a bot-check or sign-in error</summary>
+                <div class="faq__body">YouTube sometimes blocks automated downloads. Wait a few minutes and retry, or download the video manually and analyse it locally. Age-restricted or members-only videos cannot be fetched.</div>
+              </details>
+              <details>
+                <summary>No heatmap data was found for this video</summary>
+                <div class="faq__body">Heatmap (&ldquo;most replayed&rdquo;) data is not available for every video &mdash; newer uploads, live VODs, and low-traffic videos often lack it. The pipeline automatically falls back to audio-energy analysis to pick the highlight.</div>
+              </details>
+              <details>
+                <summary>The clip never renders / an ffmpeg error appears</summary>
+                <div class="faq__body">Rendering requires <code>ffmpeg</code> on your PATH. If it is missing, install ffmpeg and restart the server. The job will report a &ldquo;Render error&rdquo; with the underlying message.</div>
+              </details>
+              <details>
+                <summary>The selected segment is shorter than 3 seconds</summary>
+                <div class="faq__body">Very short source videos can produce a segment under the 3-second minimum. Try a longer source, a larger clip duration, or more context before.</div>
+              </details>
+              <details>
+                <summary>The download link does nothing</summary>
+                <div class="faq__body">Downloads are served inline from the local server. If the tab is blocked, use &ldquo;Open in new tab&rdquo; or right-click the link and choose Save As. Generated files live under the <code>jobs/</code> folder.</div>
+              </details>
+<details>
+                <summary>YouTube upload fails or says &ldquo;not connected&rdquo;</summary>
+                <div class="faq__body">Make sure <code>credentials/client_secret.json</code> exists, the YouTube Data API v3 is enabled, and you clicked <em>Connect YouTube</em>. If the OAuth app is still in <em>Testing</em>, reconnect about every 7 days because the refresh token expires. Unverified apps can only upload <em>private</em> videos.</div>
+              </details>
+              <details>
+                <summary>Which video formats are accepted as input?</summary>
+                <div class="faq__body">Standard YouTube watch URLs, youtu.be short links, Shorts, embeds, and mobile/music domains are all accepted as long as they contain an 11-character video ID.</div>
+              </details>
+            </div>
+          </section>
+
+          <div class="callout callout--spaced">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <div>Ready to make a clip? Head back to the generator and paste your first link.</div>
+          </div>
+
+          <a class="btn btn--primary" href="/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Back to Clip Studio
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span class="footer__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+        </span>
+        Clip Studio
+      </span>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="/">Home</a>
+        <a href="/help">Docs</a>
+        <a href="/#how-it-works">How it works</a>
+      </nav>
+      <span>Local tool &middot; runs on 127.0.0.1</span>
+    </div>
+  </footer>
+
+  <div id="toast-stack" class="toast-stack" role="region" aria-label="Notifications" aria-live="polite"></div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# ===== YouTube OAuth credentials & access tokens (NEVER commit) =====
+credentials/*
+!credentials/.gitkeep
+client_secret*.json
+token.json
+youtube_token.json
+*.token.json
+credentials.json
+
+# ===== Generated clip output =====
+jobs/
+*.mp4
+*.mkv
+*.mov
+*.webm
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.Python
+
+# ===== OS / editor =====
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ===== Logs =====
+*.log
+
+# Temporary and backup files
+.claude/scheduled_tasks.lock
+*.bak
+tempCodeRunnerFile.py
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python cache
+__pycache__/
+*.pyc

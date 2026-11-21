@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clip Studio — YouTube to 9:16 Clips</title>
+  <meta name="description" content="Turn any YouTube video into a crisp 9:16 vertical clip with heatmap-powered moment detection.">
+  <meta name="color-scheme" content="dark light">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("clipper-theme");
+        if (t !== "light" && t !== "dark") {
+          t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="/" aria-label="Clip Studio home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span class="brand__text">Clip Studio</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a class="nav__link" href="/" aria-current="page">Home</a>
+        <a class="nav__link nav__link--desktop" href="#how-it-works">How it works</a>
+        <a class="nav__link" href="/help">Docs</a>
+      </nav>
+<div class="nav__actions">
+        <div class="yt-nav" id="yt-nav" aria-label="YouTube account" hidden>
+          <a class="btn btn--ghost btn--sm yt-nav__connect" id="yt-connect" href="/youtube/connect">
+            <span class="yt-nav__dot" aria-hidden="true"></span>
+            <span id="yt-connect-label">Connect YouTube</span>
+          </a>
+          <div class="yt-nav__connected" id="yt-connected" hidden>
+            <span class="yt-nav__channel" id="yt-channel"></span>
+            <button type="button" class="yt-nav__disconnect" id="yt-disconnect" aria-label="Disconnect YouTube" title="Disconnect YouTube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Switch to light theme">
+          <span class="theme-toggle__track" aria-hidden="true"></span>
+          <span class="theme-toggle__icon" aria-hidden="true">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__copy reveal">
+          <span class="eyebrow">AI-assisted clipping</span>
+          <h1 class="hero__title">Turn any YouTube video into a <span class="grad">scroll-stopping 9:16 clip</span></h1>
+          <p class="hero__sub">Paste a link and let the pipeline find the most replayed moment, then render a crisp vertical cut automatically.</p>
+          <div class="hero__chips">
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>9:16 1080p</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s6 5 6 11a6 6 0 0 1-12 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 1.5 0 2-1.5 2-3.5S12 2 12 2z"/></svg>Heatmap-powered</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg>No watermark</span>
+          </div>
+          <div class="hero__meta">
+            <div class="hero__stat"><strong>1080p</strong><span>Vertical output</span></div>
+            <div class="hero__stat"><strong>9:16</strong><span>Aspect ratio</span></div>
+            <div class="hero__stat"><strong>0</strong><span>Watermarks</span></div>
+          </div>
+        </div>
+
+        <div class="generator card reveal reveal--d2">
+          <div class="generator__head">
+            <span class="generator__title">Create a clip</span>
+            <span class="generator__badge">9:16 &middot; 1080p</span>
+          </div>
+
+          <form id="generate-form" novalidate>
+            <div class="field">
+              <label class="field__label" for="youtube_url">YouTube URL <span class="field__hint">Paste a link</span></label>
+              <div class="input-wrap">
+                <input class="input input--mono" id="youtube_url" name="youtube_url" type="text" inputmode="url"
+                       autocomplete="off" spellcheck="false"
+                       placeholder="https://www.youtube.com/watch?v=..." aria-describedby="url-error">
+                <button type="button" class="input-action" id="paste-btn" title="Paste from clipboard">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Paste
+                </button>
+              </div>
+              <p class="field__error" id="url-error" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                <span class="field__error-text">Enter a valid YouTube URL.</span>
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="clip_duration">Clip duration <span class="field__hint">10&ndash;300s</span></label>
+              <div class="range-row">
+                <input class="range" type="range" id="clip_duration" name="clip_duration" min="10" max="300" step="5" value="45" aria-describedby="duration-readout">
+                <output class="readout" id="duration-readout" for="clip_duration">45</output>
+              </div>
+              <div class="range-scale"><span>10s</span><span>300s</span></div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="context_before">Context before <span class="field__hint">0&ndash;60s</span></label>
+              <div class="range-row">
+                <input class="range" type="range" id="context_before" name="context_before" min="0" max="60" step="1" value="10" aria-describedby="context-readout">
+                <output class="readout" id="context-readout" for="context_before">10</output>
+              </div>
+              <div class="range-scale"><span>0s</span><span>60s</span></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn--primary" id="generate-btn">
+                <span class="btn__spinner" aria-hidden="true"></span>
+                <span class="btn__label">Generate clip</span>
+              </button>
+              <button type="button" class="btn btn--ghost" id="clear-btn">Reset</button>
+            </div>
+          </form>
+
+          <div class="status-panel" id="status-panel" hidden>
+            <span class="status-dot" id="status-dot" aria-hidden="true"></span>
+            <span class="status-text" id="status-text" role="status" aria-live="polite">Ready</span>
+            <span class="status-pct" aria-hidden="true">0%</span>
+          </div>
+
+          <div class="progress" id="progress">
+            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Clip generation progress">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <div id="error-area" class="error-card" role="alert" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+            <div>
+              <div class="error-card__title">Something went wrong</div>
+              <div class="error-card__msg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Pipeline</span>
+          <h2>From link to vertical clip</h2>
+          <p>Every run moves through six stages. The tracker below follows the real backend status in real time.</p>
+        </div>
+        <ol class="pipeline" aria-label="Clip generation stages">
+          <li class="pipeline__step" data-stage="0">
+            <span class="pipeline__dot">1</span>
+            <span class="pipeline__label">Queued</span>
+          </li>
+          <li class="pipeline__step" data-stage="1">
+            <span class="pipeline__dot">2</span>
+            <span class="pipeline__label">Parsing</span>
+          </li>
+          <li class="pipeline__step" data-stage="2">
+            <span class="pipeline__dot">3</span>
+            <span class="pipeline__label">Downloading</span>
+          </li>
+          <li class="pipeline__step" data-stage="3">
+            <span class="pipeline__dot">4</span>
+            <span class="pipeline__label">Heatmap / Audio</span>
+          </li>
+          <li class="pipeline__step" data-stage="4">
+            <span class="pipeline__dot">5</span>
+            <span class="pipeline__label">Rendering</span>
+          </li>
+          <li class="pipeline__step" data-stage="5">
+            <span class="pipeline__dot">6</span>
+            <span class="pipeline__label">Complete</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="result-section">
+      <div class="container container--narrow">
+        <div class="result reveal" id="result-area" hidden>
+          <div class="result__head">
+            <span class="result__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <div>
+              <div class="result__title" id="result-title">Clip ready</div>
+              <div class="result__sub">Your vertical clip is ready to preview and download.</div>
+            </div>
+          </div>
+          <div class="result__body">
+            <div class="preview-frame">
+              <video id="preview-video" controls playsinline preload="metadata">
+                <source type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="result__meta">
+              <dl>
+                <div class="meta-row">
+                  <dt>Duration</dt>
+                  <dd id="clip-duration">00:00</dd>
+                </div>
+                <div class="meta-row">
+                  <dt>File</dt>
+                  <dd class="mono" id="result-filename">&mdash;</dd>
+                </div>
+              </dl>
+              <div class="result__actions">
+                <a id="download-link" class="btn btn--primary" href="#" download>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                  Download MP4
+                </a>
+                <a id="open-link" class="btn btn--ghost" href="#" target="_blank" rel="noopener">Open in new tab</a>
+<button type="button" id="copy-link" class="btn btn--ghost">Copy link</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="upload" id="upload-panel" hidden>
+            <div class="upload__head">
+              <div>
+                <div class="upload__title">Upload to YouTube</div>
+                <div class="upload__sub">Optional &middot; nothing is uploaded without your approval.</div>
+              </div>
+            </div>
+
+            <div id="yt-upload-fields">
+              <div class="field">
+                <label class="field__label" for="yt-title">Title <span class="field__hint">Required</span></label>
+                <input class="input" id="yt-title" type="text" maxlength="100" autocomplete="off" placeholder="Give your clip a title">
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="yt-description">Description <span class="field__hint">Optional</span></label>
+                <textarea class="input" id="yt-description" rows="3" maxlength="5000" placeholder="Add a description, credits, or hashtags"></textarea>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="yt-privacy">Privacy</label>
+                <select class="input" id="yt-privacy">
+                  <option value="private" selected>Private &mdash; only you</option>
+                  <option value="unlisted">Unlisted &mdash; anyone with the link</option>
+                  <option value="public">Public &mdash; everyone</option>
+                </select>
+              </div>
+
+              <label class="confirm" for="yt-confirm">
+                <input type="checkbox" id="yt-confirm">
+                <span>I confirm I own this clip or have permission to upload it to my channel.</span>
+              </label>
+
+              <p class="upload__note">YouTube decides whether a video is classified as a Short &mdash; the API cannot guarantee Shorts classification. A vertical (9:16) clip under 3&nbsp;minutes and a <code>#shorts</code> hashtag in the title or description may help.</p>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn--primary" id="yt-upload-btn">
+                  <span class="btn__spinner" aria-hidden="true"></span>
+                  <span class="btn__label">Upload to YouTube</span>
+                </button>
+              </div>
+
+              <div class="upload__status" id="yt-upload-status" role="status" aria-live="polite" hidden></div>
+
+              <div class="upload__result" id="yt-upload-result" hidden>
+                Uploaded &mdash; <a id="yt-video-link" href="#" target="_blank" rel="noopener">View on YouTube</a>
+              </div>
+            </div>
+
+            <div class="upload__locked" id="yt-upload-locked" hidden>
+              <p>Connect a YouTube account in the top bar to enable uploads.</p>
+              <a class="btn btn--ghost btn--sm" href="/youtube/connect">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+                Connect YouTube
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="recent-jobs">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">History</span>
+          <h2>Recent jobs</h2>
+          <p>Click any job to re-open its live status and preview.</p>
+        </div>
+        <div class="jobs">
+          <div class="jobs__list" id="jobs-list">
+            <div class="no-jobs">No jobs yet.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span class="footer__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+        </span>
+        Clip Studio
+      </span>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="/">Home</a>
+        <a href="/help">Docs</a>
+        <a href="#how-it-works">How it works</a>
+      </nav>
+      <span>Local tool &middot; runs on 127.0.0.1</span>
+    </div>
+  </footer>
+
+  <div id="toast-stack" class="toast-stack" role="region" aria-label="Notifications" aria-live="polite"></div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
